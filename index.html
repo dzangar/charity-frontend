@@ -1,0 +1,310 @@
+<html lang="ru"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Логи Пользователей</title>
+    <link rel="stylesheet" href="styles.css">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1d1d1d;
+    color: #ffffff;
+    display: flex;
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #333;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+}
+
+.sidebar .logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar nav ul {
+    list-style-type: none;
+}
+
+.sidebar nav ul li {
+    margin-bottom: 10px;
+}
+
+.sidebar nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 18px;
+    display: block;
+    padding: 10px;
+    background-color: #444;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.sidebar nav ul li a:hover {
+    background-color: #555;
+}
+
+.content {
+    flex: 1;
+    margin-left: 250px; /* Отступ слева, чтобы контент не накладывался на боковую панель */
+    padding: 20px;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #ffffff;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#playerSearchInput {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.search-container button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #555;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-container button:hover {
+    background-color: #777;
+}
+
+.log-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #2c2c2c;
+    color: #ffffff;
+}
+
+.log-table thead {
+    background-color: #444;
+}
+
+.log-table thead th {
+    padding: 10px;
+    text-align: left;
+}
+
+.log-table tbody tr:nth-child(even) {
+    background-color: #333;
+}
+
+.log-table tbody tr:hover {
+    background-color: #555;
+}
+
+.log-table tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #555;
+}
+
+<!--.log-table tbody td:last-child {-->
+<!--    text-align: center;-->
+<!--}-->
+.pagination {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.step-links {
+    display: inline-block;
+}
+
+.pagination-link {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 0 5px;
+    background-color: #444;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.pagination-link:hover {
+    background-color: #555;
+}
+
+.current {
+    display: inline-block;
+    padding: 10px 15px;
+    margin: 0 5px;
+    background-color: #2c2c2c;
+    color: #ffffff;
+    border-radius: 5px;
+}
+/* Стили для кнопки гамбургера */
+.hamburger {
+    display: none; /* Скрыто по умолчанию */
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+/* Стили для мобильного меню */
+#navMenu {
+    display: none; /* Скрыто по умолчанию */
+}
+
+/* Показать гамбургер и скрыть меню на мобильных устройствах */
+@media (max-width: 768px) {
+    .hamburger {
+        display: block; /* Показать гамбургер на мобильных */
+    }
+
+    #navMenu {
+        display: block; /* Показать меню */
+        position: absolute;
+        top: 70px; /* Положение меню под гамбургером */
+        left: 0;
+        width: 100%;
+        background-color: #333;
+        padding: 10px 0;
+    }
+
+    #navMenu ul {
+        display: flex;
+        flex-direction: column; /* Вертикальное расположение пунктов меню */
+    }
+
+    #navMenu ul li {
+        margin: 5px 0; /* Отступы между пунктами меню */
+    }
+}
+
+</style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <h2>QAMQOR</h2>
+        </div>
+        <button class="hamburger" onclick="toggleMenu()">☰</button>
+        <nav>
+            <ul>
+                <li><a href="/logs/">Логи</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="content">
+        
+        <h1>Логи пользователей</h1>
+        
+        <form method="GET" action="/logs/">
+            <div class="search-container">
+                <input type="text" id="playerSearchInput" name="user" placeholder="Поиск по пользователям...">
+                <button type="submit">Найти</button>
+            </div>
+
+        </form>
+
+        <table class="log-table" id="logTable">
+            <thead>
+                <tr>
+                    <th>Время</th>
+                    <th>Описание</th>
+                    <th>Пользователь</th>
+                    <th>IP-адрес</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>07.11.2024 19:32:54</td>
+                    <td>root успешно вышел(ла) из своего аккаунта.</td>
+                    <td>root</td>
+                    <td>192.168.0.105</td>
+                </tr>
+                
+                <tr>
+                    <td>07.11.2024 19:32:16</td>
+                    <td>root успешно авторизовался(ась) в своем аккаунте.</td>
+                    <td>root</td>
+                    <td>192.168.0.105</td>
+                </tr>
+                
+                <tr>
+                    <td>19.10.2024 19:57:38</td>
+                    <td>admin успешно авторизовался(ась) в своем аккаунте.</td>
+                    <td>admin</td>
+                    <td>192.168.0.105</td>
+                </tr>
+                
+                <tr>
+                    <td>19.10.2024 19:57:32</td>
+                    <td>admin попытался(ась) войти в свой аккаунт, но авторизация не удалась.</td>
+                    <td>admin</td>
+                    <td>192.168.0.105</td>
+                </tr>
+                
+                <tr>
+                    <td>19.10.2024 19:35:08</td>
+                    <td>admin успешно авторизовался(ась) в своем аккаунте.</td>
+                    <td>admin</td>
+                    <td>192.168.0.105</td>
+                </tr>
+                
+                <tr>
+                    <td>19.10.2024 19:34:19</td>
+                    <td>root успешно вышел(ла) из своего аккаунта.</td>
+                    <td>root</td>
+                    <td>192.168.0.105</td>
+                </tr>
+                
+                <tr>
+                    <td>19.10.2024 19:28:52</td>
+                    <td>root успешно авторизовался(ась) в своем аккаунте.</td>
+                    <td>root</td>
+                    <td>192.168.0.105</td>
+                </tr>
+                
+                <tr>
+                    <td>19.10.2024 19:23:59</td>
+                    <td>root успешно совершил(а) пожертвование на сумму 100000 KZT для благотворительности с ID 1.</td>
+                    <td>root</td>
+                    <td>192.168.0.105</td>
+                </tr>
+                
+            </tbody>
+        </table>
+        <div class="pagination">
+            <span class="step-links">
+                
+
+                <span class="current">
+                    Страница 1 из 1.
+                </span>
+
+                
+            </span>
+        </div>
+    </div>
+</body></html>
